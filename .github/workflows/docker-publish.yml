@@ -1,0 +1,35 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker/compose:latest
+        options: --privileged
+        env:
+          DOCKER_HOST: tcp://localhost:2375/
+          DOCKER_DRIVER: overlay2
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Show Docker and Docker Compose versions
+      run: |
+        docker version
+        docker-compose version
+
+    - name: Build and start containers
+      run: docker-compose up --build -d
+
+    - name: Show running Docker containers
+      run: docker ps
+
+    - name: Install pytest and run tests
+      run: |
+        docker exec web pip install pytest
+        docker exec web pytest ./tests/*

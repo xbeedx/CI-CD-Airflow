@@ -1,0 +1,26 @@
+stages:
+  - test 
+
+image:
+  name: docker/compose:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - docker version
+  - docker-compose version
+
+
+test_job:
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+  services:
+  - docker:dind
+  stage: test
+  script:
+    - docker-compose up --build -d
+    - docker ps 
+    - docker exec ci-cd-airflow_webserver_1 pip install pytest
+    - docker exec ci-cd-airflow_webserver_1 pytest ./dags/tests.py

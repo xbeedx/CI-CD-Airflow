@@ -31,5 +31,5 @@ jobs:
 
     - name: Install pytest and run tests
       run: |
-        docker exec webserver pip install pytest
-        docker exec webserver pytest ./dags/tests.py
+        docker exec ci-cd-airflow_webserver_1 pip install pytest
+        docker exec ci-cd-airflow_webserver_1 pytest ./dags/tests.py

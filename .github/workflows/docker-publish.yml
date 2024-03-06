@@ -31,5 +31,5 @@ jobs:
 
     - name: Install pytest and run tests
       run: |
-        docker exec web pip install pytest
-        docker exec web pytest ./tests/*
+        docker exec webserver pip install pytest
+        docker exec webserver pytest ./dags/tests.py
